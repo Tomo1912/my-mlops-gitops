@@ -60,6 +60,6 @@ spec:
   ports:
     - port: 443
       targetPort: 8080
-      nodePort: 30081 # TRAJNI PRISTUP ARGO CD UI-u
+      nodePort: 30082 # TRAJNI PRISTUP ARGO CD UI-u
   selector:
     app.kubernetes.io/name: argocd-server
