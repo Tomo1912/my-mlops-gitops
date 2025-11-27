@@ -1,3 +1,7 @@
+# deployment.yaml
+# (Ovo je Manifest koji se postavlja u my-mlops-gitops repozitorij)
+
+# 1. Deployment za ML Model
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,19 +18,23 @@ spec:
       labels:
         app: ml-model
     spec:
+      # Image Pull Secret je neophodan za GHCR
+      imagePullSecrets:
+        - name: ghcr-auth
       containers:
-      - name: ml-model-container
-        # OVO JE KONACNA, ISPRAVNA PUTANJA IMAGEA:
-        image: ghcr.io/tomo1912/ml-model:latest
-        ports:
-        - containerPort: 8000
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        - name: ml-model-container
+          # KONACNA PUTANJA IMAGEA (koju je CI/CD trebao upisati)
+          image: ghcr.io/tomo1912/ml-model:latest
+          ports:
+            - containerPort: 8000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
 ---
+# 2. Permanentni NodePort Service za ML Model (PORT 32199)
 apiVersion: v1
 kind: Service
 metadata:
@@ -35,7 +43,23 @@ spec:
   selector:
     app: ml-model
   ports:
-  - port: 80
-    targetPort: 8000
+    - port: 80
+      targetPort: 8000
+      nodePort: 32199
   type: NodePort
 
+---
+# 3. Permanentni NodePort Service za ArgoCD UI (PORT 30081)
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-server-external
+  namespace: argocd
+spec:
+  type: NodePort
+  ports:
+    - port: 443
+      targetPort: 8080
+      nodePort: 30081 # TRAJNI PRISTUP ARGO CD UI-u
+  selector:
+    app.kubernetes.io/name: argocd-server
