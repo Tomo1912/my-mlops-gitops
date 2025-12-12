@@ -1,0 +1,13 @@
+# K3s config files (contain sensitive keys and certificates)
+k3s-config.yaml
+*.kubeconfig
+
+# Kubernetes secrets
+*-secret.yaml
+secrets/
+
+# Temporary files
+*.tmp
+*.bak
+.DS_Store
+
