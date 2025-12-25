@@ -40,8 +40,8 @@ spec:
 
       containers:
         - name: ml-model-container
-          image: ghcr.io/tomo1912/ml-model:local-arm64
-          imagePullPolicy: Never  # Use local image loaded into Kind
+          image: ghcr.io/tomo1912/ml-model:dec8f4f3a5a5506669c81f0e4ae21b42eed354ac
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
               protocol: TCP
