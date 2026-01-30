@@ -40,7 +40,7 @@ spec:
 
       containers:
         - name: ml-model-container
-          image: ghcr.io/tomo1912/ml-model:1d9d3af4d899efcf7a26573f088ef16aa93c5042
+          image: ghcr.io/tomo1912/ml-model:27629d22e4c2b74b9846419be6a4ca293f88180d
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
